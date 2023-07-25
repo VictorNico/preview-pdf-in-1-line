@@ -16,6 +16,10 @@ app.get('/file', function (req, res) {
   res.download(__dirname + '/test.pdf', 'test.pdf');
 });
 
+app.get('/sendfile', (req,res)=>{
+  res.sendFile(`${__dirname}/test.pdf`);
+})
+
 app.get('/broken', function (req, res) {
   var options = {
     method: 'GET',
@@ -34,12 +38,15 @@ app.get('/broken', function (req, res) {
     response.on('end', function() {
       console.log('requested content length: ', response.headers['content-length']);
       console.log('parsed content length: ', data.length);
-      res.send(data);
+      res.send('data:application/pdf;base64,'+data.toString('base64'));
     });
   });
 
   request.end();
 });
+
+
+
 
 app.get('/download', function (req, res) {
   var options = {
